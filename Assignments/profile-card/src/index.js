@@ -2,6 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 
+const skills = [
+  { name: "7x Champion", level: "abvanced", bgColor: "blue" },
+  { name: "Music Producer", level: "beginner", bgColor: "yellowgreen" },
+  { name: "Bike racing", level: "intermediate", bgColor: "green" },
+  { name: "104 Poles", level: "abvanced", bgColor: "skyblue" },
+  { name: "105 Grand prix win", level: "abvanced", bgColor: "lightgreen" },
+];
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
@@ -41,21 +49,23 @@ function Intro() {
 
 function SkillList() {
   return (
-    <div className="skill-list">
-      <Skill name="GOAT F1 Driver" emoij="😂" bgColor="skyblue" />
-      <Skill name="7x Champion" emoij="🎉" bgColor="red" />
-      <Skill name="Producer" emoij="👍" bgColor="yellow" />
-      <Skill name="Millioner" emoij="👍" bgColor="green" />
-      <Skill name="105 Grand prix win" emoij="🎉" bgColor="orange" />
-    </div>
+    <ul className="skill-list">
+      {skills.map((skill) => (
+        <Skill name={skill.name} bgColor={skill.bgColor} level={skill.level} />
+      ))}
+    </ul>
   );
 }
 
-function Skill(props) {
+function Skill({ name, bgColor, level }) {
   return (
-    <div className="skill" style={{ backgroundColor: props.bgColor }}>
-      <span>{props.name}</span>
-      <span>{props.emoij}</span>
-    </div>
+    <li className="skill" style={{ backgroundColor: bgColor }}>
+      <span>{name}</span>
+      <span>
+        {level === "beginner" && "🍼"}
+        {level === "intermediate" && "👍"}
+        {level === "abvanced" && "🔥"}
+      </span>
+    </li>
   );
 }
