@@ -10,40 +10,76 @@ export default function App() {
 }
 
 function Counter() {
-  const [countSteps, setCountSteps] = useState(1);
-  const [countCounter, setCountCounter] = useState(0);
+  const [step, setStep] = useState(1);
+  const [count, setCount] = useState(0);
 
-  const date = new Date(2024, 8, 21);
-  date.setDate(date.getDate() + countCounter);
+  const date = new Date();
+  date.setDate(date.getDate() + count);
 
   return (
     <div className="container">
-      <div className="box">
+      {/* <div className="box">
         <button
           onClick={() => {
-            if (countSteps > 1) setCountSteps((i) => i - 1);
+            if (step > 1) setStep((i) => i - 1);
           }}
         >
           -
         </button>
-        <h3>Steps : {countSteps}</h3>
+        <h3>Steps : {step}</h3>
 
-        <button onClick={() => setCountSteps((i) => i + 1)}> + </button>
+        <button onClick={() => setStep((i) => i + 1)}> + </button>
+      </div> */}
+
+      {/* <div className="box">
+        <button onClick={() => setCount((i) => i - step)}> - </button>
+        <h3>Counter : {count} </h3>
+        <button onClick={() => setCount((i) => i + step)}> + </button>
+      </div> */}
+
+      <div className="box step">
+        <h3>Steps : </h3>
+        <input
+          type="range"
+          min={1}
+          max={10}
+          value={step}
+          onChange={(e) => setStep(Number(e.target.value))}
+        />
+        <h3>{step}</h3>
       </div>
-      <div className="box">
-        <button onClick={() => setCountCounter((i) => i - countSteps)}> - </button>
-        <h3>Counter :{countCounter} </h3>
-        <button onClick={() => setCountCounter((i) => i + countSteps)}> + </button>
+
+      <div className="box counter">
+        <h3>Counter : </h3>
+        <button onClick={() => setCount((i) => i - step)}> - </button>
+        <input
+          type="text"
+          value={count}
+          onChange={(e) => setCount(Number(e.target.value))}
+        />
+        <button onClick={() => setCount((i) => i + step)}> + </button>
       </div>
-      <div className="box">
+
+      <div className="box disp">
         <h4>
-          {countCounter === 0 && `Today is ${date.toDateString()}`}
-          {countCounter > 0 &&
-            `${countCounter} days from today is ${date.toDateString()}`}
-          {countCounter < 0 &&
-            `${Math.abs(countCounter)} days ago today was ${date.toDateString()}`}
+          {count === 0 && `Today is ${date.toDateString()}`}
+          {count > 0 && `${count} days from today is ${date.toDateString()}`}
+          {count < 0 && `${Math.abs(count)} days ago today was ${date.toDateString()}`}
         </h4>
       </div>
+
+      {count !== 0 || step !== 1 ? (
+        <div className="box">
+          <button
+            onClick={(e) => {
+              setCount(0);
+              setStep(1);
+            }}
+          >
+            Reset
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }
