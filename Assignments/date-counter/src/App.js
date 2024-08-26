@@ -19,7 +19,6 @@ function Counter() {
   return (
     <div className="container">
       <div className="box">
-        <h3>Steps : </h3>
         <button
           onClick={() => {
             if (countSteps > 1) setCountSteps((i) => i - 1);
@@ -27,13 +26,13 @@ function Counter() {
         >
           -
         </button>
-        <span>{countSteps} </span>
+        <h3>Steps : {countSteps}</h3>
+
         <button onClick={() => setCountSteps((i) => i + 1)}> + </button>
       </div>
       <div className="box">
-        <h3>Counter :</h3>
         <button onClick={() => setCountCounter((i) => i - countSteps)}> - </button>
-        <span>{countCounter} </span>
+        <h3>Counter :{countCounter} </h3>
         <button onClick={() => setCountCounter((i) => i + countSteps)}> + </button>
       </div>
       <div className="box">
