@@ -70,6 +70,11 @@ input {
   background-color: #76c7ad;
 }
 
+.add-form button:hover {
+  background-color: #06b981;
+  color: #fff;
+}
+
 .list {
   background-color: #5a3e2b;
   color: #ffebb3;
