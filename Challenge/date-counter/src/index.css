@@ -13,7 +13,7 @@ body {
   background-color: #f7f7f7;
   border-radius: 3rem;
   padding: 25px 100px;
-  margin: 13rem auto;
+  margin: 4rem auto;
 }
 
 .box {
@@ -34,7 +34,8 @@ span {
   margin-top: 0.9rem;
 }
 
-.counter button {
+.counter button,
+.step button {
   border: none;
   cursor: pointer;
   height: 2rem;
