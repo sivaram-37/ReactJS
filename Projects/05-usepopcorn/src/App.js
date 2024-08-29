@@ -50,27 +50,33 @@ const tempWatchedData = [
 const average = (arr) => arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 export default function App() {
-	// eslint-disable-next-line
 	const [movies, setMovies] = useState(tempMovieData);
+	const [query, setQuery] = useState("");
+	const [watched, setWatched] = useState(tempWatchedData);
 
 	return (
 		<>
-			<Navbar movies={movies} />
-			<Main movies={movies} />
+			<Navbar>
+				<Logo />
+				<SearchBox query={query} setQuery={setQuery} />
+				<NumResult movies={movies} />
+			</Navbar>
+			<Main>
+				<Box>
+					<MoviesList movies={movies} />
+				</Box>
+
+				<Box>
+					<WatchedMoviesSummary watched={watched} />
+					<WatchedMoviesList watched={watched} />
+				</Box>
+			</Main>
 		</>
 	);
 }
 
-function Navbar({ movies }) {
-	const [query, setQuery] = useState("");
-
-	return (
-		<nav className="nav-bar">
-			<Logo />
-			<SearchBox query={query} setQuery={setQuery} />
-			<NumResult movies={movies} />
-		</nav>
-	);
+function Navbar({ children }) {
+	return <nav className="nav-bar">{children}</nav>;
 }
 
 function Logo() {
@@ -102,30 +108,25 @@ function NumResult({ movies }) {
 	);
 }
 
-function Main({ movies }) {
-	return (
-		<main className="main">
-			<MovieBox movies={movies} />
-			<WatchedBox />
-		</main>
-	);
+function Main({ children }) {
+	return <main className="main">{children}</main>;
 }
 
-function MovieBox({ movies }) {
-	const [isOpen1, setIsOpen1] = useState(true);
+function Box({ children }) {
+	const [isOpen, setIsOpen] = useState(true);
 
 	return (
 		<div className="box">
-			<button className="btn-toggle" onClick={() => setIsOpen1((open) => !open)}>
-				{isOpen1 ? "–" : "+"}
+			<button className="btn-toggle" onClick={() => setIsOpen((open) => !open)}>
+				{isOpen ? "–" : "+"}
 			</button>
 
-			{isOpen1 && <MovieList movies={movies} />}
+			{isOpen && children}
 		</div>
 	);
 }
 
-function MovieList({ movies }) {
+function MoviesList({ movies }) {
 	return (
 		<ul className="list">
 			{movies?.map((movie) => (
@@ -147,26 +148,25 @@ function Movie({ movie }) {
 	);
 }
 
-function WatchedBox() {
-	// eslint-disable-next-line
-	const [watched, setWatched] = useState(tempWatchedData);
-	const [isOpen2, setIsOpen2] = useState(true);
+// function WatchedBox() {
+// 	// eslint-disable-next-line
+// 	const [isOpen2, setIsOpen2] = useState(true);
 
-	return (
-		<div className="box">
-			<button className="btn-toggle" onClick={() => setIsOpen2((open) => !open)}>
-				{isOpen2 ? "–" : "+"}
-			</button>
+// 	return (
+// 		<div className="box">
+// 			<button className="btn-toggle" onClick={() => setIsOpen2((open) => !open)}>
+// 				{isOpen2 ? "–" : "+"}
+// 			</button>
 
-			{isOpen2 && (
-				<>
-					<WatchedMoviesSummary watched={watched} />
-					<WatchedMoviesList watched={watched} />
-				</>
-			)}
-		</div>
-	);
-}
+// 			{isOpen2 && (
+// 				<>
+// 					<WatchedMoviesSummary watched={watched} />
+// 					<WatchedMoviesList watched={watched} />
+// 				</>
+// 			)}
+// 		</div>
+// 	);
+// }
 
 function WatchedMoviesSummary({ watched }) {
 	const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
