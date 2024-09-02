@@ -7,7 +7,7 @@ const API_KEY = "f84fc31d";
 
 export default function App() {
 	const [movies, setMovies] = useState([]);
-	const [query, setQuery] = useState("interstellar");
+	const [query, setQuery] = useState("");
 	const [watched, setWatched] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
@@ -31,12 +31,17 @@ export default function App() {
 
 	useEffect(
 		function () {
+			const controller = new AbortController();
+
 			async function fetchMovie() {
 				try {
 					setIsLoading(true);
 					setError("");
 
-					const res = await fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`);
+					const res = await fetch(
+						`http://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`,
+						{ signal: controller.signal }
+					);
 
 					if (!res.ok) throw new Error("Something went wrong!");
 
@@ -44,8 +49,12 @@ export default function App() {
 					if (data.Response === "False") throw new Error("Movies not found");
 
 					setMovies(data.Search);
+					setError("");
 				} catch (err) {
-					setError(err.message);
+					if (err.name !== "AbortError") {
+						console.log(err.message);
+						setError(err.message);
+					}
 				} finally {
 					setIsLoading(false);
 				}
@@ -57,7 +66,12 @@ export default function App() {
 				return;
 			}
 
+			handleCloseMovie();
 			fetchMovie();
+
+			return function () {
+				controller.abort();
+			};
 		},
 		[query]
 	);
@@ -217,6 +231,17 @@ function MovieDetails({ selectedId, onCloseMovie, onAddToWatched, watched }) {
 		Genre: genre,
 	} = movie;
 
+	useEffect(() => {
+		function listingForEscKey(e) {
+			if (e.code === "Escape") {
+				onCloseMovie();
+			}
+		}
+		document.addEventListener("keydown", listingForEscKey);
+
+		return () => document.removeEventListener("keydown", listingForEscKey);
+	});
+
 	useEffect(
 		function () {
 			async function getMovieDetails() {
@@ -236,10 +261,19 @@ function MovieDetails({ selectedId, onCloseMovie, onAddToWatched, watched }) {
 		[selectedId]
 	);
 
-	useEffect(() => {
-		if (!title) return;
-		document.title = `Movie | ${title}`;
-	}, [title]);
+	useEffect(
+		function () {
+			if (!title) return;
+
+			document.title = `Movie | ${title}`;
+
+			//Cleanup function
+			return function () {
+				document.title = "usePopcorn";
+			};
+		},
+		[title]
+	);
 
 	return (
 		<div className="details">
@@ -256,10 +290,13 @@ function MovieDetails({ selectedId, onCloseMovie, onAddToWatched, watched }) {
 
 						<div className="details-overview">
 							<h2>{title}</h2>
+
 							<p>
 								{released} &bull; {runtime}
 							</p>
+
 							<p>{genre}</p>
+
 							<p>
 								<span>{imdbRating} IMDB rating</span>
 							</p>
@@ -271,6 +308,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddToWatched, watched }) {
 							{!isWatched ? (
 								<>
 									<StarRating maxRating={10} size={24} onSetRating={setuserRating} />
+
 									{userRating > 0 && (
 										<button className="btn-add" onClick={handleAdd}>
 											+ Add to list
@@ -283,10 +321,13 @@ function MovieDetails({ selectedId, onCloseMovie, onAddToWatched, watched }) {
 								</p>
 							)}
 						</div>
+
 						<p>
 							<em>{plot}</em>
 						</p>
+
 						<p>Starring {actors}</p>
+
 						<p>Directed By {director}</p>
 					</section>
 				</>
