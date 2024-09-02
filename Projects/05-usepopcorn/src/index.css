@@ -54,7 +54,8 @@ body {
 	max-width: 42rem;
 	background-color: var(--color-background-500);
 	border-radius: 0.9rem;
-	/* overflow: scroll; */ /* I edited */
+	overflow: auto;
+	scrollbar-width: thin;
 	position: relative;
 }
 
@@ -138,7 +139,7 @@ body {
 .list {
 	list-style: none;
 	padding: 0.8rem 0;
-	/* overflow: scroll; */ /* I edited */
+	/* overflow: scroll; */ /*I edited */
 }
 
 .list-watched {
