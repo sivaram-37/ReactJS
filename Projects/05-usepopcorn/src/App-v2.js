@@ -240,7 +240,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddToWatched, watched }) {
 		document.addEventListener("keydown", listingForEscKey);
 
 		return () => document.removeEventListener("keydown", listingForEscKey);
-	});
+	}, [onCloseMovie]);
 
 	useEffect(
 		function () {
