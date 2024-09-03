@@ -1,4 +1,37 @@
-.App {
+body {
 	font-family: sans-serif;
 	text-align: center;
+	background-color: #f1f1f1;
+}
+
+.container {
+	width: 30%;
+	margin: 12rem auto;
+	padding: 2rem;
+	border-radius: 2rem;
+	box-shadow: 0 0 10px rgb(0, 0, 0);
+	background-color: #fff;
+	font-size: large;
+	font-weight: 600;
+}
+
+.btn {
+	border-radius: 2rem;
+	padding: 0.5rem 1rem;
+	font-weight: 800;
+	font-size: large;
+	cursor: pointer;
+	border: none;
+	background-color: #000000;
+	color: #ffffff;
+}
+
+.btn:disabled {
+	cursor: wait;
+	background-color: #d1d1d1;
+}
+
+.btn:hover {
+	transition: ease 0.2s;
+	transform: scale(1.1);
 }
