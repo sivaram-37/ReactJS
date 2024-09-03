@@ -232,14 +232,14 @@ function MovieDetails({ selectedId, onCloseMovie, onAddToWatched, watched }) {
 	} = movie;
 
 	useEffect(() => {
-		function listingForEscKey(e) {
+		function lessoningForEscKey(e) {
 			if (e.code === "Escape") {
 				onCloseMovie();
 			}
 		}
-		document.addEventListener("keydown", listingForEscKey);
+		document.addEventListener("keydown", lessoningForEscKey);
 
-		return () => document.removeEventListener("keydown", listingForEscKey);
+		return () => document.removeEventListener("keydown", lessoningForEscKey);
 	}, [onCloseMovie]);
 
 	useEffect(
