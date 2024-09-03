@@ -151,9 +151,7 @@ function Logo() {
 function SearchBox({ query, setQuery }) {
 	const inputEl = useRef(null);
 
-	useEffect(function () {
-		inputEl.current.focus();
-	}, []);
+	useEffect(() => inputEl.current.focus(), []);
 
 	useEffect(
 		function () {
