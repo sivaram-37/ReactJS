@@ -1,20 +1,22 @@
 import { useState, useEffect, useRef } from "react";
 import StarRating from "./StarRating";
+import { useMovies } from "./useMovies";
+import { useLocalStorageState } from "./useLocalStorageState";
+import { useKeydown } from "./useKeydown";
 
 const average = (arr) => arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 const API_KEY = "f84fc31d";
 
 export default function App() {
-	const [movies, setMovies] = useState([]);
 	const [query, setQuery] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState("");
 	const [selectedId, setSelectedId] = useState(null);
 
-	const [watched, setWatched] = useState(() =>
-		JSON.parse(localStorage.getItem("watched"))
-	);
+	// Custom hook to get movies from API
+	const { movies, isLoading, error } = useMovies(query);
+
+	// Custom hook to store watchedMovie in localStorage and also get watchedMovie from localStorage
+	const [watched, setWatched] = useLocalStorageState([], "watched");
 
 	function handleSelectedId(id) {
 		setSelectedId((selectedId) => (selectedId === id ? null : id));
@@ -31,60 +33,6 @@ export default function App() {
 	function handleDeleteMovie(id) {
 		setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
 	}
-
-	useEffect(
-		function () {
-			localStorage.setItem("watched", JSON.stringify(watched));
-		},
-		[watched]
-	);
-
-	useEffect(
-		function () {
-			const controller = new AbortController();
-
-			async function fetchMovie() {
-				try {
-					setIsLoading(true);
-					setError("");
-
-					const res = await fetch(
-						`http://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`,
-						{ signal: controller.signal }
-					);
-
-					if (!res.ok) throw new Error("Something went wrong!");
-
-					const data = await res.json();
-					if (data.Response === "False") throw new Error("Movies not found");
-
-					setMovies(data.Search);
-					setError("");
-				} catch (err) {
-					if (err.name !== "AbortError") {
-						console.log(err.message);
-						setError(err.message);
-					}
-				} finally {
-					setIsLoading(false);
-				}
-			}
-
-			if (query.length < 3) {
-				setMovies([]);
-				setError("");
-				return;
-			}
-
-			handleCloseMovie();
-			fetchMovie();
-
-			return function () {
-				controller.abort();
-			};
-		},
-		[query]
-	);
 
 	return (
 		<>
@@ -153,23 +101,12 @@ function SearchBox({ query, setQuery }) {
 
 	useEffect(() => inputEl.current.focus(), []);
 
-	useEffect(
-		function () {
-			function listingForEnterKey(e) {
-				if (document.activeElement === inputEl.current) return;
-
-				if (e.code === "Enter") {
-					inputEl.current.focus();
-					setQuery("");
-				}
-			}
-
-			document.addEventListener("keydown", listingForEnterKey);
-
-			return () => document.removeEventListener("keydown", listingForEnterKey);
-		},
-		[setQuery]
-	);
+	// Custom hook to lesson for Enter key
+	useKeydown("Enter", () => {
+		if (document.activeElement === inputEl.current) return;
+		inputEl.current.focus();
+		setQuery("");
+	});
 
 	return (
 		<input
@@ -239,6 +176,12 @@ function MovieDetails({ selectedId, onCloseMovie, onAddToWatched, watched }) {
 	const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
 	const getuserRating = watched.find((movie) => movie.imdbID === selectedId)?.userRating;
 
+	const countRef = useRef(0);
+
+	useEffect(() => {
+		if (userRating) countRef.current++;
+	}, [userRating]);
+
 	function handleAdd() {
 		const newMovie = {
 			imdbID: selectedId,
@@ -247,6 +190,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddToWatched, watched }) {
 			userRating: Number(userRating),
 			imdbRating,
 			poster,
+			CountRatingDecisions: countRef,
 		};
 		onAddToWatched(newMovie);
 		onCloseMovie();
@@ -264,16 +208,8 @@ function MovieDetails({ selectedId, onCloseMovie, onAddToWatched, watched }) {
 		Genre: genre,
 	} = movie;
 
-	useEffect(() => {
-		function listingForEscKey(e) {
-			if (e.code === "Escape") {
-				onCloseMovie();
-			}
-		}
-		document.addEventListener("keydown", listingForEscKey);
-
-		return () => document.removeEventListener("keydown", listingForEscKey);
-	});
+	// Custom hook to lesson for Escape key
+	useKeydown("Escape", onCloseMovie);
 
 	useEffect(
 		function () {
