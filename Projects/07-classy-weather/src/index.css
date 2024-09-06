@@ -26,7 +26,7 @@ body {
 	flex-direction: column;
 	align-items: center;
 	width: 112rem;
-	gap: 4rem;
+	gap: 2rem;
 	padding: 4rem 0;
 	border: 2px solid #222;
 	outline: 2px solid #222;
@@ -34,10 +34,10 @@ body {
 }
 
 h1 {
-	font-weight: 400;
+	font-weight: 600;
 	font-size: 6rem;
 	letter-spacing: 2px;
-	word-spacing: 5px;
+	word-spacing: 10px;
 }
 
 h2 {
@@ -49,22 +49,33 @@ input,
 button {
 	font-family: inherit;
 	color: inherit;
-	font-size: 2rem;
+	font-size: 2.4rem;
 	font-weight: 600;
 	background-color: #f0d2ce;
-	padding: 1.6rem 3.2rem;
+	padding: 1.2rem 3.2rem;
 	border: none;
-	width: 32rem;
+	width: 49rem;
 	text-align: center;
+	word-spacing: 0.4rem;
 }
 
 input:focus {
 	outline: 2px solid #222;
 }
 
+.or {
+	font-weight: 600;
+}
+
 button {
-	width: 45rem;
+	word-spacing: 0.4rem;
 	cursor: pointer;
+	color: #777;
+}
+
+button:hover {
+	color: #222;
+	outline: 1px solid #222;
 }
 
 .weather {
@@ -93,7 +104,7 @@ button {
 }
 
 .day.important {
-	background-color: #ecc5c0;
+	background-color: #f7b3aa;
 	outline: 2px solid #222;
 }
 

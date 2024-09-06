@@ -9,30 +9,29 @@ function convertToFlag(countryCode) {
 }
 
 export function useWeatherApi(location) {
-	const [locationName, setLocationName] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
-	const [weather, setWeather] = useState({});
-	const [error, setError] = useState("");
+	const [locationName2, setLocationName2] = useState("");
+	const [isLoading2, setIsLoading2] = useState(false);
+	const [weather2, setWeather2] = useState({});
+	const [error2, setError2] = useState("");
 
 	useEffect(() => {
 		async function getWeather() {
-			if (location.length <= 2) return setWeather({});
+			if (location.length <= 2) return setWeather2({});
+
 			try {
-				setError("");
-				setIsLoading(true);
+				setIsLoading2(true);
 
 				const geoRes = await fetch(
 					`https://geocoding-api.open-meteo.com/v1/search?name=${location}`
 				);
 				const geoData = await geoRes.json();
-				console.log(geoData);
 
 				if (!geoData.results) throw new Error("Location not found");
 
 				const { latitude, longitude, timezone, name, country_code } =
 					geoData.results.at(0);
 
-				setLocationName(`${name}, ${convertToFlag(country_code)}`);
+				setLocationName2(`${name}, ${convertToFlag(country_code)}`);
 
 				const weatherRes = await fetch(
 					`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&timezone=${timezone}&daily=weathercode,temperature_2m_max,temperature_2m_min`
@@ -41,17 +40,16 @@ export function useWeatherApi(location) {
 				const weatherData = await weatherRes.json();
 
 				if (weatherData.error) throw new Error("Can't Fetch Weather");
-				console.log(weatherData);
 
-				setWeather(weatherData.daily);
+				setWeather2(weatherData.daily);
 			} catch (err) {
 				console.log(err);
-				setError(err.message);
+				setError2(err.message);
 			} finally {
-				setIsLoading(false);
+				setIsLoading2(false);
 			}
 		}
 		getWeather();
 	}, [location]);
-	return { locationName, isLoading, weather, error };
+	return { locationName2, isLoading2, weather2, error2 };
 }

@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react";
 import { useWeatherApi } from "./useWeatherApi";
+import { useCurrentLocationWeather } from "./useCurrentLocationWeather";
 
 export default function App() {
 	const [location, setLocation] = useState("");
 
-	const { locationName, isLoading, weather, error } = useWeatherApi(location);
+	const { getPosition, locationName1, isLoading1, weather1, error1 } =
+		useCurrentLocationWeather();
+
+	const { isLoading2, error2, locationName2, weather2 } = useWeatherApi(location);
+
+	const error = error1 || error2;
+	const isLoading = isLoading1 || isLoading2;
 
 	useEffect(() => {
 		const loc = localStorage.getItem("lastWeatherLocation");
@@ -12,33 +19,40 @@ export default function App() {
 	}, []);
 
 	function handleInput(e) {
+		getPosition(true);
 		setLocation(e.target.value);
 		localStorage.setItem("lastWeatherLocation", e.target.value);
 	}
 
+	function handleGetYourLocation() {
+		setLocation("");
+		localStorage.setItem("lastWeatherLocation", "");
+		getPosition();
+	}
+
 	return (
 		<div className="app">
-			<h1>Classy Weather</h1>
-			<p>Search from Location</p>
+			<h1>ClassY WeatheR</h1>
 			<input
 				type="text"
-				placeholder="Search from Location"
+				placeholder="SearcH froM LocatioN"
 				value={location}
 				onChange={handleInput}
 			/>
 
-			<p>Or</p>
+			<p className="or">Or</p>
 
-			<button>Get Weather For Your Current Location</button>
+			<button onClick={handleGetYourLocation}>ClicK FoR CurrenT LocatioN</button>
 
 			{error && <p>{error}</p>}
-			{isLoading && <p className="loader">Loading...,</p>}
-			{weather.time && <Weather locationName={locationName} weather={weather} />}
+			{isLoading && <p className="loader">LoadinG...</p>}
+			{(weather1?.time && <Weather weather={weather1} cityName={locationName1} />) ||
+				(weather2.time && <Weather weather={weather2} cityName={locationName2} />)}
 		</div>
 	);
 }
 
-function Weather({ weather, locationName }) {
+function Weather({ weather, cityName }) {
 	const {
 		weathercode: codes,
 		time: dates,
@@ -48,7 +62,7 @@ function Weather({ weather, locationName }) {
 
 	return (
 		<>
-			<h2>Weather In {locationName}</h2>
+			<h2>Weather In {cityName}</h2>
 			<ul className="weather">
 				{dates.map((date, i) =>
 					i === 0 ? (
