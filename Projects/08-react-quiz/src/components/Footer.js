@@ -1,5 +1,13 @@
-function Footer({ children }) {
-	return <footer>{children}</footer>;
+import NextButton from "./NextButton";
+import Timer from "./Timer";
+
+function Footer() {
+	return (
+		<footer>
+			<Timer />
+			<NextButton />
+		</footer>
+	);
 }
 
 export default Footer;
