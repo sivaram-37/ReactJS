@@ -35,30 +35,6 @@
         "lng": 13.376933665713324
       },
       "id": "98443197"
-    },
-    {
-      "id": "8d96",
-      "cityName": "Bengaluru",
-      "country": "India",
-      "emoji": "🇮🇳",
-      "date": "2024-09-13T04:36:26.924Z",
-      "notes": "Current Living",
-      "position": {
-        "lat": "12.969503378535816",
-        "lng": "77.6006976218588"
-      }
-    },
-    {
-      "id": "5ad5",
-      "cityName": "Tirupati",
-      "country": "India",
-      "emoji": "🇮🇳",
-      "date": "2024-09-13T04:38:56.234Z",
-      "notes": "Tirumala",
-      "position": {
-        "lat": "13.644639760261867",
-        "lng": "79.43209614223115"
-      }
     }
   ]
 }
