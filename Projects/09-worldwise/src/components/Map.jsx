@@ -49,7 +49,7 @@ function Map() {
 			<MapContainer
 				className={styles.map}
 				center={mapPosition}
-				zoom={6}
+				zoom={10}
 				scrollWheelZoom={true}
 			>
 				<TileLayer
@@ -64,6 +64,7 @@ function Map() {
 						</Popup>
 					</Marker>
 				))}
+
 				<ChangeCity position={mapPosition} />
 				<DetectClick />
 			</MapContainer>
