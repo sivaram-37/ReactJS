@@ -12,8 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
-// eslint-disable-next-line react-refresh/only-export-components
-export function convertToEmoji(countryCode) {
+function convertToEmoji(countryCode) {
 	const codePoints = countryCode
 		.toUpperCase()
 		.split("")
