@@ -10,7 +10,8 @@ import Message from "./Message";
 import { useCities } from "../Contexts/CitiesProvider";
 import { useNavigate } from "react-router-dom";
 
-const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
+const BASE_URL = "https://api.opencagedata.com/geocode/v1/json";
+const API_KEY = "0dd8feb4b1e14a44b2495995697cb021";
 
 function convertToEmoji(countryCode) {
 	const codePoints = countryCode
@@ -40,15 +41,22 @@ function Form() {
 				try {
 					setIsLoadingData(true);
 					setError("");
-					const res = await fetch(`${BASE_URL}?latitude=${lat}&longitude=${lng}`);
+					const res = await fetch(`${BASE_URL}?q=${lat}+${lng}&key=${API_KEY}`);
 					const data = await res.json();
 
-					if (!data.countryCode)
+					if (!data.results)
 						throw new Error("🤦 It doesn't seem to be a city. Click somewhere else.");
 
-					setCityName(data.city || data.locality || "");
-					setCountry(data.countryName);
-					setEmoji(convertToEmoji(data.countryCode));
+					console.log(data);
+					const {
+						city,
+						county,
+						country_code: countryCode,
+						country: countryName,
+					} = data.results.at(0).components;
+					setCityName(city || county || "");
+					setCountry(countryName);
+					setEmoji(convertToEmoji(countryCode));
 				} catch (err) {
 					setError(err.message);
 				} finally {
