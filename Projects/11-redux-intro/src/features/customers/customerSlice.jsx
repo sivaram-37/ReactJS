@@ -1,5 +1,3 @@
-import store from "../../Store";
-
 const initialStateCustomer = {
 	fullName: "",
 	nationalID: "",
@@ -23,12 +21,12 @@ export default function customerReducer(state = initialStateCustomer, action) {
 }
 
 export function createCustomer(fullName, nationalID) {
-	store.dispatch({
+	return {
 		type: "customer/createCustomer",
 		payload: { fullName, nationalID, createdOn: new Date().toISOString() },
-	});
+	};
 }
 
 export function updateName(updatedFullName) {
-	store.dispatch({ type: "customer/updateName", payload: updatedFullName });
+	return { type: "customer/updateName", payload: updatedFullName };
 }

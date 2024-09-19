@@ -1,5 +1,3 @@
-import store from "../../Store";
-
 const initialStateAccount = {
 	balance: 0,
 	loan: 0,
@@ -37,20 +35,20 @@ export default function accountReducer(state = initialStateAccount, action) {
 }
 
 export function deposit(amount) {
-	store.dispatch({ type: "account/deposit", payload: amount });
+	return { type: "account/deposit", payload: amount };
 }
 
 export function withdraw(amount) {
-	store.dispatch({ type: "account/withdraw", payload: amount });
+	return { type: "account/withdraw", payload: amount };
 }
 
 export function requestLoan(amount, purpose) {
-	store.dispatch({
+	return {
 		type: "account/requestLoan",
 		payload: { amount, purpose },
-	});
+	};
 }
 
 export function payLoan() {
-	store.dispatch({ type: "account/payLoan" });
+	return { type: "account/payLoan" };
 }
