@@ -78,22 +78,22 @@ const store = createStore(reducer);
 // console.log(store.getState());
 
 function deposit(amount) {
-	store.dispatch({ type: "account/deposit", payload: amount });
+	return { type: "account/deposit", payload: amount };
 }
 
 function withdraw(amount) {
-	store.dispatch({ type: "account/withdraw", payload: amount });
+	return { type: "account/withdraw", payload: amount };
 }
 
 function requestLoan(amount, purpose) {
-	store.dispatch({
+	return {
 		type: "account/requestLoan",
 		payload: { amount, purpose },
-	});
+	};
 }
 
 function payLoan() {
-	store.dispatch({ type: "account/payLoan" });
+	return { type: "account/payLoan" };
 }
 
 deposit(500);
@@ -109,14 +109,14 @@ payLoan();
 console.log(store.getState());
 
 function createCustomer(fullName, nationalID) {
-	store.dispatch({
+	return {
 		type: "customer/createCustomer",
 		payload: { fullName, nationalID, createdOn: new Date().toISOString() },
-	});
+	};
 }
 
 function updateName(updatedFullName) {
-	store.dispatch({ type: "customer/updateName", payload: updatedFullName });
+	return { type: "customer/updateName", payload: updatedFullName };
 }
 
 createCustomer("sivaram", "12341");
