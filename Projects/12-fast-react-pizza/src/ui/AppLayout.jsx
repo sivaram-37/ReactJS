@@ -4,20 +4,24 @@ import Loader from "./Loader";
 import CartOverview from "../features/cart/CartOverview";
 
 function AppLayout() {
-	const navigation = useNavigation();
-	const isLoading = navigation.state === "loading";
+  const navigation = useNavigation();
+  const isLoading = navigation.state === "loading";
 
-	return (
-		<div className="layout">
-			{isLoading && <Loader />}
+  return (
+    <div className="h-screen grid grid-rows-[auto_1fr_auto]">
+      {isLoading && <Loader />}
 
-			<Header />
-			<main>
-				<Outlet />
-			</main>
-			<CartOverview />
-		</div>
-	);
+      <Header />
+
+      <div className="overflow-x-auto">
+        <main className="mx-auto max-w-3xl">
+          <Outlet />
+        </main>
+      </div>
+
+      <CartOverview />
+    </div>
+  );
 }
 
 export default AppLayout;
